@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gunnu's Study - Class 12 Portal</title>
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Glassmorphic Navbar -->
+  <nav class="navbar glass">
+    <a href="#" class="logo" id="nav-logo">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>Gunnu's Study</span>
+    </a>
+    
+    <div class="nav-links">
+      <a href="#" class="nav-item active" id="nav-dashboard-link">Dashboard</a>
+      <a href="#" class="nav-item" id="nav-polsci-link">Political Science</a>
+    </div>
+
+    <div class="nav-controls">
+      <!-- Dark/Light Theme Toggle -->
+      <button class="btn-theme" id="theme-toggle" aria-label="Toggle theme">
+        <i class="fa-solid fa-sun"></i>
+      </button>
+      
+      <!-- User Profile Badge -->
+      <div class="user-badge">
+        <div class="user-avatar">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <span>Guest Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- VIEW 1: DASHBOARD -->
+    <section id="view-dashboard" class="fade-in">
+      <!-- Hero Section -->
+      <div class="hero glass">
+        <div class="hero-content">
+          <h1>Class 12 Study Portal</h1>
+          <p>Access premium summaries, interactive flashcards, and quizzes designed specifically for 12th-grade success.</p>
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="dashboard-search" placeholder="Search chapters, keywords, or topics...">
+          </div>
+        </div>
+      </div>
+
+      <!-- Subjects Grid -->
+      <h2 class="dashboard-title">
+        <i class="fa-solid fa-book-open"></i> Available Subjects
+      </h2>
+      <div class="subjects-grid">
+        <!-- Political Science (Unlocked) -->
+        <div class="subject-card glass" id="subject-card-polsci" style="cursor: pointer;">
+          <div class="subject-icon">
+            <i class="fa-solid fa-landmark-flag"></i>
+          </div>
+          <h3>Political Science</h3>
+          <p>Master world politics and post-independence Indian governance. Includes flashcards, comprehensive summaries, and practice exams.</p>
+          <div class="subject-footer">
+            <span class="completion-status status-unread" id="dashboard-polsci-progress">
+              <i class="fa-solid fa-circle-notch"></i> 0% Completed
+            </span>
+            <button class="btn-enter" aria-label="Enter Political Science">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- History (Locked) -->
+        <div class="subject-card glass locked">
+          <div class="subject-icon">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <h3>History</h3>
+          <p>Explore ancient, medieval, and modern Indian history. Relive key milestones through interactive timelines.</p>
+          <div class="subject-footer">
+            <span class="badge-locked">
+              <i class="fa-solid fa-lock"></i> Locked
+            </span>
+          </div>
+        </div>
+
+        <!-- Economics (Locked) -->
+        <div class="subject-card glass locked">
+          <div class="subject-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h3>Economics</h3>
+          <p>Understand microeconomics, macroeconomics, and Indian economic development through simplified graphs and quizzes.</p>
+          <div class="subject-footer">
+            <span class="badge-locked">
+              <i class="fa-solid fa-lock"></i> Locked
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: SUBJECT DETAIL VIEW -->
+    <section id="view-subject" class="fade-in" style="display: none;">
+      <div class="subject-header-container">
+        <button class="btn-back" id="btn-back-to-dashboard">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        
+        <div class="subject-progress-container glass">
+          <div class="progress-header">
+            <span>Course Progress</span>
+            <span id="subject-progress-text">0/4 Chapters (0%)</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="subject-progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero glass" style="padding: 2.5rem 2rem; margin-bottom: 2.5rem; text-align: left;">
+        <h1 id="subject-view-title" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Political Science</h1>
+        <p id="subject-view-desc" style="margin: 0; max-width: 800px;">Explore the dynamics of World Politics and post-independence Indian Politics.</p>
+      </div>
+
+      <!-- Book 1 Sections (Contemporary World Politics) -->
+      <div class="textbook-section">
+        <h3 class="textbook-title">
+          <i class="fa-solid fa-globe"></i> Book 1: Contemporary World Politics
+        </h3>
+        <div class="chapters-list" id="book1-chapters">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Book 2 Sections (Politics in India Since Independence) -->
+      <div class="textbook-section">
+        <h3 class="textbook-title">
+          <i class="fa-solid fa-map-location-dot"></i> Book 2: Politics in India Since Independence
+        </h3>
+        <div class="chapters-list" id="book2-chapters">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: CHAPTER STUDY VIEW -->
+    <section id="view-chapter" class="fade-in" style="display: none;">
+      <div style="margin-bottom: 2rem;">
+        <button class="btn-back" id="btn-back-to-subject">
+          <i class="fa-solid fa-arrow-left"></i> Back to Subject
+        </button>
+      </div>
+
+      <div class="chapter-detail-grid">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="chapter-sidebar glass">
+          <h3 class="sidebar-title">Book Chapters</h3>
+          <ul class="sidebar-menu" id="sidebar-chapters-list">
+            <!-- Dynamically populated -->
+          </ul>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="study-workspace">
+          
+          <!-- Workspace Header -->
+          <div class="study-header">
+            <div class="study-header-top">
+              <div>
+                <span class="chapter-number" id="study-chapter-number">Chapter 1</span>
+                <h2 class="study-title" id="study-chapter-title">The End of Bipolarity</h2>
+              </div>
+              <button class="btn-complete-checkbox" id="btn-toggle-complete">
+                <i class="fa-regular fa-square" id="complete-icon"></i>
+                <span id="complete-text">Mark Completed</span>
+              </button>
+            </div>
+
+            <!-- Tabs: Notes, Flashcards, Quiz -->
+            <div class="study-tabs">
+              <button class="tab-btn active" data-tab="notes">
+                <i class="fa-solid fa-file-invoice"></i> Summary Notes
+              </button>
+              <button class="tab-btn" data-tab="flashcards">
+                <i class="fa-solid fa-clone"></i> Flashcards
+              </button>
+              <button class="tab-btn" data-tab="quiz">
+                <i class="fa-solid fa-circle-question"></i> Practice Quiz
+              </button>
+            </div>
+          </div>
+
+          <!-- Study Panels -->
+          <!-- Panel 1: Notes -->
+          <div id="panel-notes" class="study-content-panel active fade-in">
+            <div class="notes-container" id="notes-content">
+              <!-- Dynamically populated notes -->
+            </div>
+          </div>
+
+          <!-- Panel 2: Flashcards -->
+          <div id="panel-flashcards" class="study-content-panel fade-in">
+            <div class="flashcards-panel">
+              <div class="flashcard" id="flashcard-element">
+                <!-- Front Side -->
+                <div class="card-face card-front">
+                  <span class="card-hint">Key Question</span>
+                  <p class="card-question" id="flashcard-question">What was the Bolshevik Revolution?</p>
+                  <span class="card-click-tip">Click to reveal answer</span>
+                </div>
+                <!-- Back Side -->
+                <div class="card-face card-back">
+                  <span class="card-hint">Explanation</span>
+                  <p class="card-answer" id="flashcard-answer">It was the 1917 socialist revolution in Russia that gave birth to the USSR.</p>
+                  <span class="card-click-tip">Click to flip back</span>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="flashcard-controls">
+                <button class="btn-circle" id="btn-prev-card" aria-label="Previous card">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <span class="flashcard-counter" id="flashcard-counter-text">1 / 4</span>
+                <button class="btn-circle" id="btn-next-card" aria-label="Next card">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3: Quiz -->
+          <div id="panel-quiz" class="study-content-panel fade-in">
+            <div class="quiz-panel" id="quiz-question-view">
+              <!-- Progress Indicator -->
+              <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+              </div>
+
+              <div class="quiz-question-container">
+                <h4 id="quiz-question-text">Which treaty led to the creation of the European Union?</h4>
+                <div class="quiz-options-list" id="quiz-options-list">
+                  <!-- Dynamically populated options -->
+                </div>
+              </div>
+
+              <!-- Answer Feedback -->
+              <div class="quiz-feedback" id="quiz-feedback-box">
+                <h5 id="quiz-feedback-title">
+                  <i class="fa-solid fa-circle-check"></i> Correct!
+                </h5>
+                <p id="quiz-feedback-explanation">Maastricht Treaty was signed in 1992, establishing the European Union.</p>
+              </div>
+
+              <div class="quiz-actions">
+                <button class="btn-next-question" id="btn-next-question">
+                  Next Question <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quiz Score Summary Screen -->
+            <div class="quiz-results" id="quiz-results-view">
+              <div class="results-score-circle">
+                <span class="results-score" id="results-score-text">3</span>
+                <span class="results-total" id="results-total-text">/ 3</span>
+              </div>
+              <h4 id="results-headline">Outstanding Job!</h4>
+              <p id="results-message">You've mastered this chapter's key points.</p>
+              <button class="btn-reset-quiz" id="btn-reset-quiz">
+                <i class="fa-solid fa-rotate-left"></i> Retake Quiz
+              </button>
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Load data.js first, then app.js -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
