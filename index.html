@@ -202,7 +202,7 @@
               </div>
             </div>
 
-            <!-- Tabs: Notes, Flashcards, Quiz -->
+            <!-- Tabs: Notes, Flashcards, Quiz, Slides, Resources -->
             <div class="study-tabs">
               <button class="tab-btn active" data-tab="notes">
                 <i class="fa-solid fa-file-invoice"></i> Summary Notes
@@ -212,6 +212,12 @@
               </button>
               <button class="tab-btn" data-tab="quiz">
                 <i class="fa-solid fa-circle-question"></i> Practice Quiz
+              </button>
+              <button class="tab-btn" data-tab="slides">
+                <i class="fa-solid fa-file-powerpoint"></i> PPT Slides
+              </button>
+              <button class="tab-btn" data-tab="resources">
+                <i class="fa-solid fa-folder-open"></i> Resources
               </button>
             </div>
           </div>
@@ -299,6 +305,87 @@
             </div>
           </div>
 
+          <!-- Panel 4: Slides -->
+          <div id="panel-slides" class="study-content-panel fade-in">
+            <div class="slides-container" style="text-align: center; padding: 10px 0;">
+              <div class="slide-viewer glass" style="max-width: 600px; margin: 0 auto 20px auto; padding: 30px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color); background: var(--bg-secondary); min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;">
+                <span style="font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--accent-color); position: absolute; top: 15px; left: 20px;" id="slide-num-text">Slide 1 / 4</span>
+                <h4 id="slide-title" style="font-family: var(--font-title); font-size: clamp(1.2rem, 4vw, 1.5rem); margin-top: 10px; margin-bottom: 15px;">Bolshevik Revolution (1917)</h4>
+                <ul id="slide-bullet-points" style="text-align: left; max-width: 480px; color: var(--text-secondary); font-size: 14px; line-height: 1.6; padding-left: 20px;">
+                  <li>Led by Vladimir Lenin & Bolshevik Communist Party.</li>
+                  <li>Overthrew Tsar regime in Russia.</li>
+                  <li>Founded Union of Soviet Socialist Republics (USSR).</li>
+                  <li>Egalitarian principles & state-owned economy introduced.</li>
+                </ul>
+              </div>
+              
+              <div style="display: flex; justify-content: center; gap: 15px; align-items: center; margin-bottom: 20px;">
+                <button class="btn-circle" id="btn-prev-slide" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+                <span id="slide-counter" style="font-family: var(--font-mono); font-size: 14px; font-weight: 600;">1 / 4</span>
+                <button class="btn-circle" id="btn-next-slide" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+              
+              <a id="btn-download-ppt" class="btn-complete-checkbox" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-decoration: none; max-width: 280px; margin: 0 auto;" href="#" download>
+                <i class="fa-solid fa-download"></i> Download Slides (.pptx)
+              </a>
+            </div>
+          </div>
+
+          <!-- Panel 5: Resources -->
+          <div id="panel-resources" class="study-content-panel fade-in">
+            <div class="resources-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; padding: 10px 0;">
+              
+              <!-- NCERT Solutions -->
+              <div class="stat-card glass" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div>
+                  <div style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fa-solid fa-book"></i></div>
+                  <h4 style="font-family: var(--font-title); font-size: 16px; margin-bottom: 8px;">NCERT Solutions</h4>
+                  <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5;">Chapter-end question solutions drafted in simple, board-ready formats.</p>
+                </div>
+                <a href="#" class="btn-complete-checkbox" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; padding: 6px 12px;" id="link-ncert-sol" download>
+                  <i class="fa-solid fa-file-pdf"></i> Download PDF
+                </a>
+              </div>
+
+              <!-- Revision Worksheets -->
+              <div class="stat-card glass" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div>
+                  <div style="font-size: 1.5rem; color: var(--ussr); margin-bottom: 10px;"><i class="fa-solid fa-file-signature"></i></div>
+                  <h4 style="font-family: var(--font-title); font-size: 16px; margin-bottom: 8px;">Practice Worksheet</h4>
+                  <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5;">A collection of conceptual MCQs, short answers, and long answers to practice.</p>
+                </div>
+                <a href="#" class="btn-complete-checkbox" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; padding: 6px 12px;" id="link-worksheet" download>
+                  <i class="fa-solid fa-file-arrow-down"></i> Download PDF
+                </a>
+              </div>
+
+              <!-- Board Exam Papers -->
+              <div class="stat-card glass" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div>
+                  <div style="font-size: 1.5rem; color: var(--usa); margin-bottom: 10px;"><i class="fa-solid fa-paste"></i></div>
+                  <h4 style="font-family: var(--font-title); font-size: 16px; margin-bottom: 8px;">10-Year Board Papers</h4>
+                  <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5;">Previous years' CBSE exam questions sorted specifically for this chapter.</p>
+                </div>
+                <a href="#" class="btn-complete-checkbox" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; padding: 6px 12px;" id="link-board-papers" download>
+                  <i class="fa-solid fa-download"></i> Get Papers
+                </a>
+              </div>
+
+              <!-- Lecture Video Link -->
+              <div class="stat-card glass" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div>
+                  <div style="font-size: 1.5rem; color: #ff3333; margin-bottom: 10px;"><i class="fa-brands fa-youtube"></i></div>
+                  <h4 style="font-family: var(--font-title); font-size: 16px; margin-bottom: 8px;">Recommended Lecture</h4>
+                  <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5;">A curated video lecture explaining the collapse of USSR and Shock Therapy.</p>
+                </div>
+                <a href="https://www.youtube.com" target="_blank" rel="noopener" class="btn-complete-checkbox" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; padding: 6px 12px;">
+                  <i class="fa-solid fa-play"></i> Watch Lecture
+                </a>
+              </div>
+
+            </div>
+          </div>
+
         </main>
       </div>
     </section>
@@ -309,7 +396,7 @@
   <div id="pomodoro-widget" class="glass" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 220px; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
     <h5 style="margin: 0 0 5px 0; font-size: 13px; font-family: var(--font-mono); color: var(--accent-color); text-transform: uppercase;">Study Timer</h5>
     <div id="timer-display" style="font-size: 28px; font-weight: 700; font-family: var(--font-mono); margin-bottom: 10px; color: var(--text-primary);">25:00</div>
-    <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 8px;">
+    <div class="timer-controls" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 8px;">
       <button id="btn-timer-play" class="btn-circle" style="width: 32px; height: 32px; font-size: 12px;"><i class="fa-solid fa-play"></i></button>
       <button id="btn-timer-pause" class="btn-circle" style="width: 32px; height: 32px; font-size: 12px; display: none;"><i class="fa-solid fa-pause"></i></button>
       <button id="btn-timer-reset" class="btn-circle" style="width: 32px; height: 32px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i></button>

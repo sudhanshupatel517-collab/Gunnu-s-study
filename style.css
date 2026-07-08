@@ -1591,3 +1591,149 @@ tbody td:first-child { color: var(--text-primary); font-weight: 600; }
   }
 }
 
+/* ---------- MOBILE PORTRAIT ORIENTATION OPTIMISATIONS ---------- */
+@media (max-width: 768px) {
+  .study-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 0.4rem !important;
+    padding-bottom: 0.35rem !important;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .study-tabs::-webkit-scrollbar {
+    display: none !important;
+  }
+  .tab-btn {
+    flex-shrink: 0 !important;
+    font-size: 0.78rem !important;
+    padding: 0.5rem 0.85rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-container {
+    padding: 0.65rem !important;
+    margin-top: 65px !important;
+    min-height: calc(100vh - 65px) !important;
+  }
+  .navbar {
+    padding: 0.6rem 0.75rem !important;
+  }
+  .logo span {
+    font-size: 1.15rem !important;
+  }
+  .user-badge span {
+    display: none; /* Hide username on tiny screens to save space */
+  }
+  .hero {
+    padding: 2rem 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .hero-content h1 {
+    font-size: 1.75rem !important;
+  }
+  .hero-content p {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+  }
+  .subjects-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .study-workspace {
+    padding: 1rem 0.6rem !important;
+    border-radius: var(--border-radius-sm) !important;
+  }
+  .study-title {
+    font-size: 1.3rem !important;
+  }
+  .chapter-number {
+    font-size: 9px !important;
+  }
+  .btn-complete-checkbox {
+    padding: 0.4rem 0.65rem !important;
+    font-size: 0.75rem !important;
+  }
+  
+  /* Timeline & detail spacing */
+  .timeline {
+    padding-left: 20px !important;
+  }
+  .t-item::before {
+    left: -20px !important;
+    width: 8px !important;
+    height: 8px !important;
+    top: 6px !important;
+  }
+  .t-year {
+    font-size: 12.5px !important;
+  }
+  .t-text {
+    font-size: 13px !important;
+  }
+  
+  /* Concept cards */
+  details.concept summary {
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    gap: 8px !important;
+  }
+  details.concept summary::after {
+    font-size: 16px !important;
+  }
+  .concept-body {
+    padding: 0 14px 14px 14px !important;
+    font-size: 13px !important;
+  }
+  
+  /* Flowchart nodes width fits nicely */
+  .flow-box {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    max-width: 100% !important;
+  }
+  .flow-arrow {
+    font-size: 16px !important;
+    margin: 1px 0 !important;
+  }
+  
+  /* Horizontal sticky Pomodoro Timer at bottom */
+  #pomodoro-widget {
+    bottom: 8px !important;
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 6px 12px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+  #pomodoro-widget h5 {
+    margin: 0 !important;
+    font-size: 10px !important;
+  }
+  #pomodoro-widget #timer-display {
+    margin: 0 !important;
+    font-size: 18px !important;
+  }
+  #pomodoro-widget .timer-controls {
+    margin: 0 !important;
+    display: flex !important;
+    gap: 6px !important;
+  }
+  #pomodoro-widget .timer-controls button {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 9px !important;
+  }
+  #pomodoro-widget #timer-mode {
+    font-size: 9px !important;
+  }
+}
+
+

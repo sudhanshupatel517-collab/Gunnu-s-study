@@ -14,7 +14,8 @@ let state = {
   timerSecondsLeft: 25 * 60,
   timerInterval: null,
   timerMode: 'focus', // 'focus' or 'break'
-  isTimerRunning: false
+  isTimerRunning: false,
+  slideIndex: 0,
 };
 
 const elements = {
@@ -93,7 +94,17 @@ const elements = {
   btnTimerPause: document.getElementById('btn-timer-pause'),
   btnTimerReset: document.getElementById('btn-timer-reset'),
   timerModeText: document.getElementById('timer-mode'),
-  btnPrintPdf: document.getElementById('btn-print-pdf')
+  btnPrintPdf: document.getElementById('btn-print-pdf'),
+  slideNumText: document.getElementById('slide-num-text'),
+  slideTitle: document.getElementById('slide-title'),
+  slideBulletPoints: document.getElementById('slide-bullet-points'),
+  btnPrevSlide: document.getElementById('btn-prev-slide'),
+  btnNextSlide: document.getElementById('btn-next-slide'),
+  slideCounter: document.getElementById('slide-counter'),
+  btnDownloadPpt: document.getElementById('btn-download-ppt'),
+  linkNcertSol: document.getElementById('link-ncert-sol'),
+  linkWorksheet: document.getElementById('link-worksheet'),
+  linkBoardPapers: document.getElementById('link-board-papers'),
 };
 
 // Initialize Application
@@ -395,6 +406,26 @@ function setupEventListeners() {
   }
   if (elements.btnPrintPdf) {
     elements.btnPrintPdf.addEventListener('click', printNotes);
+  }
+
+
+  // Slide Player bindings
+  if (elements.btnPrevSlide) {
+    elements.btnPrevSlide.addEventListener('click', () => {
+      if (state.slideIndex > 0) {
+        state.slideIndex--;
+        renderSlides();
+      }
+    });
+  }
+  if (elements.btnNextSlide) {
+    elements.btnNextSlide.addEventListener('click', () => {
+      const chapter = getCurrentChapter();
+      if (chapter && chapter.slides && state.slideIndex < chapter.slides.length - 1) {
+        state.slideIndex++;
+        renderSlides();
+      }
+    });
   }
 
 }
@@ -946,4 +977,52 @@ function printNotes() {
       d.open = originalStates[idx];
     });
   }, 100);
+}
+
+
+// Slide Player Renderer
+function renderSlides() {
+  const chapter = getCurrentChapter();
+  if (!chapter || !chapter.slides || chapter.slides.length === 0) {
+    // Hide panel if no slides
+    if (elements.slideTitle) elements.slideTitle.textContent = "No Slides Available";
+    return;
+  }
+  
+  const slide = chapter.slides[state.slideIndex];
+  
+  if (elements.slideNumText) {
+    elements.slideNumText.textContent = `Slide ${state.slideIndex + 1} / ${chapter.slides.length}`;
+  }
+  if (elements.slideTitle) {
+    elements.slideTitle.textContent = slide.title;
+  }
+  if (elements.slideCounter) {
+    elements.slideCounter.textContent = `${state.slideIndex + 1} / ${chapter.slides.length}`;
+  }
+  
+  if (elements.slideBulletPoints) {
+    elements.slideBulletPoints.innerHTML = '';
+    slide.points.forEach(point => {
+      const li = document.createElement('li');
+      li.style.marginBottom = '8px';
+      li.textContent = point;
+      elements.slideBulletPoints.appendChild(li);
+    });
+  }
+  
+  if (elements.btnPrevSlide) elements.btnPrevSlide.disabled = state.slideIndex === 0;
+  if (elements.btnNextSlide) elements.btnNextSlide.disabled = state.slideIndex === chapter.slides.length - 1;
+}
+
+// Resources Renderer
+function renderResources() {
+  const chapter = getCurrentChapter();
+  if (!chapter || !chapter.resources) return;
+  
+  const r = chapter.resources;
+  if (elements.linkNcertSol) elements.linkNcertSol.href = r.ncert || '#';
+  if (elements.linkWorksheet) elements.linkWorksheet.href = r.worksheet || '#';
+  if (elements.linkBoardPapers) elements.linkBoardPapers.href = r.board || '#';
+  if (elements.btnDownloadPpt) elements.btnDownloadPpt.href = r.ppt || '#';
 }
