@@ -1524,3 +1524,70 @@ tbody td:first-child { color: var(--text-primary); font-weight: 600; }
     flex-wrap: wrap;
   }
 }
+
+/* ---------- PRINT / PDF EXPORT STYLES ---------- */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+  }
+  .navbar,
+  .btn-back,
+  .chapter-sidebar,
+  .study-header,
+  #panel-flashcards,
+  #panel-quiz,
+  #pomodoro-widget,
+  .nav-controls,
+  .user-badge {
+    display: none !important;
+  }
+  .main-container {
+    margin-top: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .study-workspace {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+  .notes-container {
+    color: #000000 !important;
+  }
+  .notes-container h3 {
+    color: #000000 !important;
+    border-left-color: #000000 !important;
+  }
+  details.concept {
+    border: 1px solid #ccc !important;
+    background: transparent !important;
+    page-break-inside: avoid;
+  }
+  details.concept summary::after {
+    display: none;
+  }
+  .concept-body {
+    display: block !important;
+    color: #333 !important;
+  }
+  .timeline::before {
+    background: #000000 !important;
+  }
+  .t-item::before {
+    background: #000000 !important;
+    box-shadow: none !important;
+  }
+  .flow-box {
+    border-color: #000000 !important;
+    background: transparent !important;
+    color: #000000 !important;
+  }
+  .stat-card {
+    border-color: #ccc !important;
+    background: transparent !important;
+  }
+}
+

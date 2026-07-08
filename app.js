@@ -9,10 +9,14 @@ let state = {
   quizQuestionIndex: 0,
   quizScore: 0,
   quizAnswers: [], // To track user answers per question
-  isQuizAnswered: false
+  isQuizAnswered: false,
+  // Timer states
+  timerSecondsLeft: 25 * 60,
+  timerInterval: null,
+  timerMode: 'focus', // 'focus' or 'break'
+  isTimerRunning: false
 };
 
-// DOM Elements
 const elements = {
   // Theme Toggle
   themeToggle: document.getElementById('theme-toggle'),
@@ -78,7 +82,18 @@ const elements = {
   resultsTotalText: document.getElementById('results-total-text'),
   resultsHeadline: document.getElementById('results-headline'),
   resultsMessage: document.getElementById('results-message'),
-  btnResetQuiz: document.getElementById('btn-reset-quiz')
+  btnResetQuiz: document.getElementById('btn-reset-quiz'),
+  
+  // Efficiency Additions
+  btnReadAloud: document.getElementById('btn-read-aloud'),
+  btnToggleTimer: document.getElementById('btn-toggle-timer'),
+  pomodoroWidget: document.getElementById('pomodoro-widget'),
+  timerDisplay: document.getElementById('timer-display'),
+  btnTimerPlay: document.getElementById('btn-timer-play'),
+  btnTimerPause: document.getElementById('btn-timer-pause'),
+  btnTimerReset: document.getElementById('btn-timer-reset'),
+  timerModeText: document.getElementById('timer-mode'),
+  btnPrintPdf: document.getElementById('btn-print-pdf')
 };
 
 // Initialize Application
@@ -215,17 +230,36 @@ function showView(viewId) {
   elements.navDashboardLink.classList.remove('active');
   elements.navPolSciLink.classList.remove('active');
   
+  // Manage text-to-speech cancel
+  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (elements.btnReadAloud) {
+      elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+      elements.btnReadAloud.classList.remove('active');
+    }
+  }
+  
   if (viewId === 'dashboard') {
     elements.viewDashboard.style.display = 'block';
     elements.navDashboardLink.classList.add('active');
     renderDashboardProgress();
+    if (elements.btnReadAloud) elements.btnReadAloud.style.display = 'none';
   } else if (viewId === 'subject') {
     elements.viewSubject.style.display = 'block';
     elements.navPolSciLink.classList.add('active');
     updateSubjectProgress();
     renderSubjectChapters();
+    if (elements.btnReadAloud) elements.btnReadAloud.style.display = 'none';
   } else if (viewId === 'chapter') {
     elements.viewChapter.style.display = 'block';
+    if (elements.btnReadAloud) {
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab && activeTab.dataset.tab === 'notes') {
+        elements.btnReadAloud.style.display = 'inline-flex';
+      } else {
+        elements.btnReadAloud.style.display = 'none';
+      }
+    }
   }
   
   // Scroll to top
@@ -297,7 +331,19 @@ function setupEventListeners() {
       } else if (targetTab === 'quiz') {
         resetQuizMode();
       }
-    });
+      
+      if (elements.btnReadAloud) {
+        if (targetTab === 'notes') {
+          elements.btnReadAloud.style.display = 'inline-flex';
+        } else {
+          elements.btnReadAloud.style.display = 'none';
+          if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            elements.btnReadAloud.classList.remove('active');
+          }
+        }
+      }});
   });
   
   // Flashcard interactions
@@ -336,6 +382,21 @@ function setupEventListeners() {
   elements.btnResetQuiz.addEventListener('click', () => {
     resetQuizMode();
   });
+
+  // Read Aloud, Timer, PDF bindings
+  if (elements.btnReadAloud) {
+    elements.btnReadAloud.addEventListener('click', toggleReadAloud);
+  }
+  if (elements.btnToggleTimer) {
+    elements.btnToggleTimer.addEventListener('click', toggleTimerWidget);
+    elements.btnTimerPlay.addEventListener('click', startTimer);
+    elements.btnTimerPause.addEventListener('click', pauseTimer);
+    elements.btnTimerReset.addEventListener('click', resetTimer);
+  }
+  if (elements.btnPrintPdf) {
+    elements.btnPrintPdf.addEventListener('click', printNotes);
+  }
+
 }
 
 // Subject View Renderer
@@ -704,4 +765,185 @@ function setupSearch() {
       searchResultsDropdown.style.display = 'none';
     }
   });
+}
+
+
+// ---------- EFFICIENCY OPTIONS IMPLEMENTATION ----------
+
+// Text-to-Speech (Read Aloud)
+let currentSpeechUtterance = null;
+function toggleReadAloud() {
+  if (!window.speechSynthesis) {
+    alert("Text-to-Speech is not supported in this browser.");
+    return;
+  }
+  
+  const synth = window.speechSynthesis;
+  
+  if (synth.speaking) {
+    synth.cancel();
+    elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    elements.btnReadAloud.classList.remove('active');
+  } else {
+    // Get notes container content (clean text representation)
+    const textToRead = elements.notesContent.innerText;
+    if (!textToRead || textToRead.trim() === "") {
+      return;
+    }
+    
+    currentSpeechUtterance = new SpeechSynthesisUtterance(textToRead);
+    currentSpeechUtterance.rate = 1.0;
+    
+    currentSpeechUtterance.onend = () => {
+      elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+      elements.btnReadAloud.classList.remove('active');
+    };
+    
+    currentSpeechUtterance.onerror = () => {
+      elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+      elements.btnReadAloud.classList.remove('active');
+    };
+    
+    elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+    elements.btnReadAloud.classList.add('active');
+    
+    synth.speak(currentSpeechUtterance);
+  }
+}
+
+// Pomodoro Study Timer
+function toggleTimerWidget() {
+  const displayStyle = elements.pomodoroWidget.style.display;
+  if (displayStyle === 'none' || displayStyle === '') {
+    elements.pomodoroWidget.style.display = 'block';
+    elements.btnToggleTimer.classList.add('active');
+  } else {
+    elements.pomodoroWidget.style.display = 'none';
+    elements.btnToggleTimer.classList.remove('active');
+  }
+}
+
+function startTimer() {
+  if (state.isTimerRunning) return;
+  
+  state.isTimerRunning = true;
+  elements.btnTimerPlay.style.display = 'none';
+  elements.btnTimerPause.style.display = 'inline-flex';
+  
+  state.timerInterval = setInterval(() => {
+    if (state.timerSecondsLeft > 0) {
+      state.timerSecondsLeft--;
+      updateTimerDisplay();
+    } else {
+      // Timer finished!
+      playTimerChime();
+      clearInterval(state.timerInterval);
+      state.isTimerRunning = false;
+      
+      // Switch modes
+      if (state.timerMode === 'focus') {
+        state.timerMode = 'break';
+        state.timerSecondsLeft = 5 * 60; // 5 minute break
+        elements.timerModeText.textContent = "Break Time";
+        elements.timerModeText.style.color = "var(--success-color)";
+      } else {
+        state.timerMode = 'focus';
+        state.timerSecondsLeft = 25 * 60; // 25 minute study focus
+        elements.timerModeText.textContent = "Focus Session";
+        elements.timerModeText.style.color = "var(--text-secondary)";
+      }
+      
+      updateTimerDisplay();
+      elements.btnTimerPlay.style.display = 'inline-flex';
+      elements.btnTimerPause.style.display = 'none';
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  if (!state.isTimerRunning) return;
+  
+  clearInterval(state.timerInterval);
+  state.isTimerRunning = false;
+  
+  elements.btnTimerPlay.style.display = 'inline-flex';
+  elements.btnTimerPause.style.display = 'none';
+}
+
+function resetTimer() {
+  clearInterval(state.timerInterval);
+  state.isTimerRunning = false;
+  
+  if (state.timerMode === 'focus') {
+    state.timerSecondsLeft = 25 * 60;
+  } else {
+    state.timerSecondsLeft = 5 * 60;
+  }
+  
+  updateTimerDisplay();
+  elements.btnTimerPlay.style.display = 'inline-flex';
+  elements.btnTimerPause.style.display = 'none';
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(state.timerSecondsLeft / 60);
+  const seconds = state.timerSecondsLeft % 60;
+  
+  const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+  const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+  
+  elements.timerDisplay.textContent = formattedMinutes + ':' + formattedSeconds;
+}
+
+function playTimerChime() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 Note
+    
+    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+    
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.8);
+  } catch (e) {
+    console.log("AudioContext chime failed:", e);
+  }
+}
+
+// Print / PDF Export
+function printNotes() {
+  // Cancel speech narration before printing
+  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (elements.btnReadAloud) {
+      elements.btnReadAloud.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+      elements.btnReadAloud.classList.remove('active');
+    }
+  }
+  
+  // Temporarily expand all collapsible concept notes (<details>) so they print fully
+  const detailsElements = document.querySelectorAll('details.concept');
+  const originalStates = [];
+  
+  detailsElements.forEach((d, idx) => {
+    originalStates[idx] = d.open;
+    d.open = true;
+  });
+  
+  // Trigger browser print window
+  window.print();
+  
+  // Restore original details collapse states immediately after
+  setTimeout(() => {
+    detailsElements.forEach((d, idx) => {
+      d.open = originalStates[idx];
+    });
+  }, 100);
 }

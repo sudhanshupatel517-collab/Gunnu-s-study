@@ -24,6 +24,16 @@
     </div>
 
     <div class="nav-controls">
+      <!-- Read Aloud (Speak) -->
+      <button class="btn-theme" id="btn-read-aloud" aria-label="Read Notes Aloud" style="display: none;">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+      
+      <!-- Pomodoro Timer Toggle -->
+      <button class="btn-theme" id="btn-toggle-timer" aria-label="Toggle Pomodoro Timer">
+        <i class="fa-solid fa-stopwatch"></i>
+      </button>
+
       <!-- Dark/Light Theme Toggle -->
       <button class="btn-theme" id="theme-toggle" aria-label="Toggle theme">
         <i class="fa-solid fa-sun"></i>
@@ -180,10 +190,16 @@
                 <span class="chapter-number" id="study-chapter-number">Chapter 1</span>
                 <h2 class="study-title" id="study-chapter-title">The End of Bipolarity</h2>
               </div>
-              <button class="btn-complete-checkbox" id="btn-toggle-complete">
-                <i class="fa-regular fa-square" id="complete-icon"></i>
-                <span id="complete-text">Mark Completed</span>
-              </button>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="btn-complete-checkbox" id="btn-print-pdf" aria-label="Export PDF">
+                  <i class="fa-solid fa-file-pdf"></i>
+                  <span>Export PDF</span>
+                </button>
+                <button class="btn-complete-checkbox" id="btn-toggle-complete">
+                  <i class="fa-regular fa-square" id="complete-icon"></i>
+                  <span id="complete-text">Mark Completed</span>
+                </button>
+              </div>
             </div>
 
             <!-- Tabs: Notes, Flashcards, Quiz -->
@@ -288,6 +304,20 @@
     </section>
 
   </main>
+
+  <!-- Floating Pomodoro Timer Widget -->
+  <div id="pomodoro-widget" class="glass" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 220px; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+    <h5 style="margin: 0 0 5px 0; font-size: 13px; font-family: var(--font-mono); color: var(--accent-color); text-transform: uppercase;">Study Timer</h5>
+    <div id="timer-display" style="font-size: 28px; font-weight: 700; font-family: var(--font-mono); margin-bottom: 10px; color: var(--text-primary);">25:00</div>
+    <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 8px;">
+      <button id="btn-timer-play" class="btn-circle" style="width: 32px; height: 32px; font-size: 12px;"><i class="fa-solid fa-play"></i></button>
+      <button id="btn-timer-pause" class="btn-circle" style="width: 32px; height: 32px; font-size: 12px; display: none;"><i class="fa-solid fa-pause"></i></button>
+      <button id="btn-timer-reset" class="btn-circle" style="width: 32px; height: 32px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i></button>
+    </div>
+    <div style="display: flex; justify-content: space-around; font-size: 10px; font-family: var(--font-mono);">
+      <span id="timer-mode" style="color: var(--text-secondary);">Focus Session</span>
+    </div>
+  </div>
 
   <!-- Load data.js first, then app.js -->
   <script src="data.js"></script>
