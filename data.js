@@ -932,7 +932,7 @@ const STUDY_DATA = {
                 ncert: "resources/political_science/ch1_ncert_solutions.pdf",
                 worksheet: "resources/political_science/ch1_practice_worksheet.pdf",
                 board: "resources/political_science/ch1_board_papers.pdf",
-                ppt: "The_End_of_Bipolarity_Part1_for gunnu .pdf"
+                ppt: "The_End_of_Bipolarity_Part1_for_gunnu.pdf"
               },
               flashcards: [
                 {
